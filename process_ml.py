@@ -1,26 +1,26 @@
 def process(las_file, well_data):
     # Plotly imports
     import streamlit as st
+    
     from plotly.subplots import make_subplots
     import plotly.graph_objects as go
     import plotly.figure_factory as ff
     import plotly.express as px
+    
     import missingno as msno
     import numpy as np
     from sklearn.impute import SimpleImputer, KNNImputer
     import pandas as pd
     import matplotlib.pyplot as plt
-    from joblib import load
+    from joblib
     import facies_plot
     from sklearn.preprocessing import StandardScaler
-    import cloudpickle as cp
-
-    # Cargar el modelo
-    with open('classification_model.pkl', 'rb') as f:
-        loaded_ml = cp.load(f)
-    with open('neuronal_network_model.pkl', 'rb') as f:
-        loaded_rnn = cp.load(f)
     
+    # Cargar los modelos
+    loaded_ml = joblib.load('classification_model.pkl')
+    loaded_rnn = joblib.load('neuronal_network_model.pkl')
+
+
     scaler= StandardScaler()
     
     st.title('Data Processing')
@@ -271,10 +271,6 @@ def process(las_file, well_data):
 
     # Contenedor inferior para el botón de predicción
     bottom_container = st.container()
-
-    # Cargar los modelos
-    #loaded_ml = load('classification_model.pkl')
-    #loaded_rnn = load('neuronal_network_model.pkl')
 
     curves_res = required_columns  # Esto es solo un marcador de posición
     # Añadir botón de predicción basado en la selección
