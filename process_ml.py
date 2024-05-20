@@ -279,7 +279,7 @@ def process(las_file, well_data):
                 button = st.button("Predict with Machine Learning")
                 if button:
                     import joblib
-                    loaded_ml = joblib.load('classification_model.pkl')
+                    loaded_ml = joblib.load('classification_model.joblib')
                     y_pred = loaded_ml.predict(X)
                     st.write("Predictions:")
                     st.dataframe(y_pred)
