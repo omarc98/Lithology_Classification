@@ -296,7 +296,7 @@ def process(las_file, well_data):
                     scaler= StandardScaler()
                     #loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
                     loaded_rnn = load('neuronal_network_model.joblib')    
-                    #X = scaler.fit_transform(X)
+                    X = scaler.fit_transform(X)
                     y_pred = loaded_rnn.predict(X)
                     y_pred = np.argmax(y_pred, axis=1)
                     st.write("Predictions:")
