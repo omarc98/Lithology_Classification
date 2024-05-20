@@ -6,6 +6,7 @@ plotly==5.22.0
 scikit-learn==1.4.2
 numpy==1.26.4
 joblib==1.4.0
+cloudpickle==2.0.0
 
 
 
