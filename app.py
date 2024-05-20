@@ -8,7 +8,6 @@ import header
 import raw_data
 import plot
 import process_ml
-import ModelPredict
 import facies_plot
 
 @st.cache_data
