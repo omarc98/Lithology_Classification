@@ -4,5 +4,10 @@ plotly==5.22.0
 scikit-learn==1.4.2
 joblib==1.4.0
 matplotlib==3.8.4
-
+tensorflow==2.16.1
+xgboost==2.0.3
+seaborn==0.13.2
+category_encoders==2.6.3
+scipy==1.13.0
+streamlit==1.34.0
 
