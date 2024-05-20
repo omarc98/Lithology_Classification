@@ -1,6 +1,7 @@
 def prediction_model(las_file, well_data):
     import streamlit as st
     import numpy as np
+    import joblib
     
     
     st.title('LAS File Selection Model and Prediction')
@@ -39,7 +40,7 @@ def prediction_model(las_file, well_data):
             curves = [replacement_string if item == target_string else item for item in curves]
             X = well_data[curves]
             
-            import joblib
+           
             loaded_model = joblib.load('classification_model.pkl')
             lithology_preds = loaded_model.predict(X)
             st.write(lithology_preds)

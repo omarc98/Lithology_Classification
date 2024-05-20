@@ -10,7 +10,7 @@ def process(las_file, well_data):
     from sklearn.impute import SimpleImputer, KNNImputer
     import pandas as pd
     import matplotlib.pyplot as plt
-    import joblib
+    from joblib import load
     import facies_plot
     from sklearn.preprocessing import StandardScaler
     
@@ -266,8 +266,8 @@ def process(las_file, well_data):
     bottom_container = st.container()
 
     # Cargar los modelos
-    loaded_ml = joblib.load('classification_model.pkl')
-    loaded_rnn = joblib.load('neuronal_network_model.pkl')
+    loaded_ml = load('classification_model.pkl')
+    loaded_rnn = load('neuronal_network_model.pkl')
 
     curves_res = required_columns  # Esto es solo un marcador de posición
     # Añadir botón de predicción basado en la selección
