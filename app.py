@@ -7,7 +7,7 @@ import plot
 import process_ml
 import facies_plot
 
-@st.cache_data
+#@st.cache_data
 def load_data(uploaded_file):
     import lasio
     import pandas as pd
