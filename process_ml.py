@@ -12,13 +12,9 @@ def process(las_file, well_data):
     from sklearn.impute import SimpleImputer, KNNImputer
     import pandas as pd
     import matplotlib.pyplot as plt
-    from joblib
     import facies_plot
     from sklearn.preprocessing import StandardScaler
     
-    # Cargar los modelos
-    loaded_ml = joblib.load('classification_model.pkl')
-    loaded_rnn = joblib.load('neuronal_network_model.pkl')
 
 
     scaler= StandardScaler()
@@ -273,12 +269,18 @@ def process(las_file, well_data):
     bottom_container = st.container()
 
     curves_res = required_columns  # Esto es solo un marcador de posición
+    
+    # Cargar los modelos
+
+    
     # Añadir botón de predicción basado en la selección
     with bottom_container:
         if selection == 'Machine Learning':
             if len(curves_res) == 5:  # Permitir predicción solo con exactamente 5 curvas
                 button = st.button("Predict with Machine Learning")
                 if button:
+                    from joblib
+                    loaded_ml = joblib.load('classification_model.pkl')
                     y_pred = loaded_ml.predict(X)
                     st.write("Predictions:")
                     st.dataframe(y_pred)
@@ -293,6 +295,8 @@ def process(las_file, well_data):
         else:
             button = st.button("Predict with Neural Network")
             if button:
+                import joblib
+                loaded_rnn = joblib.load('neuronal_network_model.pkl')    
                 X_scaled = scaler.fit_transform(X)
                 y_pred = loaded_rnn.predict(X_scaled)
                 y_pred = np.argmax(y_pred, axis=1)
