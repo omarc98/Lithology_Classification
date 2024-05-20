@@ -1,6 +1,3 @@
-import lasio
-import missingno as mno
-import pandas as pd
 import streamlit as st
 from io import StringIO
 
@@ -12,6 +9,10 @@ import facies_plot
 
 @st.cache_data
 def load_data(uploaded_file):
+    import lasio
+    import pandas as pd
+    from io import StringIO
+    import streamlit as st
     if uploaded_file is not None:
         try:
             bytes_data = uploaded_file.read()

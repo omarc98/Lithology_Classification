@@ -16,7 +16,6 @@ def process(las_file, well_data):
     from sklearn.preprocessing import StandardScaler
     
 
-
     scaler= StandardScaler()
     
     st.title('Data Processing')
@@ -279,7 +278,7 @@ def process(las_file, well_data):
             if len(curves_res) == 5:  # Permitir predicción solo con exactamente 5 curvas
                 button = st.button("Predict with Machine Learning")
                 if button:
-                    from joblib
+                    import joblib
                     loaded_ml = joblib.load('classification_model.pkl')
                     y_pred = loaded_ml.predict(X)
                     st.write("Predictions:")
