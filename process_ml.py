@@ -294,8 +294,9 @@ def process(las_file, well_data):
         else:
             button = st.button("Predict with Neural Network")
             if button:
-                from joblib import load
-                loaded_rnn = load('neuronal_network_model.pkl')    
+                import tensorflof as tf
+                loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
+                #loaded_rnn = load('neuronal_network_model.pkl')    
                 X_scaled = scaler.fit_transform(X)
                 y_pred = loaded_rnn.predict(X_scaled)
                 y_pred = np.argmax(y_pred, axis=1)
