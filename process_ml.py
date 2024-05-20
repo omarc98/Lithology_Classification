@@ -251,7 +251,7 @@ def process(las_file, well_data):
     Neutron Porosity (NPHI) and Density (RHOB). Please select these specific curves to predict.""")
 
     # Selección del modelo de clasificación
-    selection = st.radio('Select the classification model', ('Machine Learning', 'Neural Network'))
+    selection = st.radio('Select the classification model', ('Machine Learning', 'Neuronal Network'))
 
     # Verificar que las columnas necesarias están en los datos imputados
     required_columns = ['GR', 'RD', 'PEF', 'NPHI', 'RHOB']
@@ -287,22 +287,23 @@ def process(las_file, well_data):
                     
             else:
                 st.write("Please select exactly 5 curves to predict with Machine Learning.")
-        else:
-            button = st.button("Predict with Neural Network")
-            if button:
-                from joblib import load
-                from sklearn.preprocessing import StandardScaler
-                scaler= StandardScaler()
-                #loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
-                loaded_rnn = load('neuronal_network_model.joblib')    
-                #X = scaler.fit_transform(X)
-                y_pred = loaded_rnn.predict(X)
-                y_pred = np.argmax(y_pred, axis=1)
-                st.write("Predictions:")
-                st.dataframe(y_pred)
-                curves = ['GR','NPHI','RHOB','RD']
-                well_name = 'Pozo con redes neuronales'
-                facies_colors = ['#00008B', '#2CA25F', 'gold']
-                imputed_data['Facies_id']=y_pred
-                facies_plot.facies_plot(imputed_data,curves,well_name,facies_colors)
+        elif selection == "Neuronal Network":
+            if len(curves_res) == 5:  # Permitir predicción solo con exactamente 5 curvas           
+                button = st.button("Predict with Neuronal Network")
+                if button:
+                    from joblib import load
+                    from sklearn.preprocessing import StandardScaler
+                    scaler= StandardScaler()
+                    #loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
+                    loaded_rnn = load('neuronal_network_model.joblib')    
+                    #X = scaler.fit_transform(X)
+                    y_pred = loaded_rnn.predict(X)
+                    y_pred = np.argmax(y_pred, axis=1)
+                    st.write("Predictions:")
+                    st.dataframe(y_pred)
+                    curves = ['GR','NPHI','RHOB','RD']
+                    well_name = 'Pozo con redes neuronales'
+                    facies_colors = ['#00008B', '#2CA25F', 'gold']
+                    imputed_data['Facies_id']=y_pred
+                    facies_plot.facies_plot(imputed_data,curves,well_name,facies_colors)
 
