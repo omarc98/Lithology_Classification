@@ -13,10 +13,6 @@ def process(las_file, well_data):
     import pandas as pd
     import matplotlib.pyplot as plt
     import facies_plot
-    from sklearn.preprocessing import StandardScaler
-    
-
-    scaler= StandardScaler()
     
     st.title('Data Processing')
     
@@ -295,10 +291,12 @@ def process(las_file, well_data):
             button = st.button("Predict with Neural Network")
             if button:
                 from joblib import load
+                from sklearn.preprocessing import StandardScaler
+                scaler= StandardScaler()
                 #loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
                 loaded_rnn = load('neuronal_network_model.joblib')    
-                X_scaled = scaler.fit_transform(X)
-                y_pred = loaded_rnn.predict(X_scaled)
+                X = scaler.fit_transform(X)
+                y_pred = loaded_rnn.predict(X)
                 y_pred = np.argmax(y_pred, axis=1)
                 st.write("Predictions:")
                 st.dataframe(y_pred)
