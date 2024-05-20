@@ -278,8 +278,8 @@ def process(las_file, well_data):
             if len(curves_res) == 5:  # Permitir predicción solo con exactamente 5 curvas
                 button = st.button("Predict with Machine Learning")
                 if button:
-                    import joblib
-                    loaded_ml = joblib.load('classification_model.joblib')
+                    from joblib import load
+                    loaded_ml = load('classification_model.joblib')
                     y_pred = loaded_ml.predict(X)
                     st.write("Predictions:")
                     st.dataframe(y_pred)
@@ -294,8 +294,8 @@ def process(las_file, well_data):
         else:
             button = st.button("Predict with Neural Network")
             if button:
-                import joblib
-                loaded_rnn = joblib.load('neuronal_network_model.pkl')    
+                from joblib import load
+                loaded_rnn = load('neuronal_network_model.pkl')    
                 X_scaled = scaler.fit_transform(X)
                 y_pred = loaded_rnn.predict(X_scaled)
                 y_pred = np.argmax(y_pred, axis=1)
