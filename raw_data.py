@@ -21,15 +21,22 @@ def raw_data(las_file, well_data):
 
     # Curve Information
     st.subheader('**Curve Information**')
-    for count, curve in enumerate(las_file.curves):
-        st.write(f"Curve: {curve.mnemonic}, \t\t Units: {curve.unit}, \t Description: {curve.descr}")
+    curves_data = {
+    "Curve": [curve.mnemonic for curve in las_file.curves],
+    "Units": [curve.unit for curve in las_file.curves],
+    "Description": [curve.descr for curve in las_file.curves]}
+
+    # Crear un DataFrame
+    df_curves = pd.DataFrame(curves_data)
+    st.dataframe(df_curves)
+
         
     #LAS Information
     st.subheader('LAS Information')
     rows = well_data.shape[0]
     cols = len(well_data.columns)
 
-    st.write("There are: ",cols,"features and ",rows,"rows")
+    st.write("The LAS file has ",cols,"columns and ",rows,"rows")
 
         
     data_nan = well_data.notnull().astype('int')
