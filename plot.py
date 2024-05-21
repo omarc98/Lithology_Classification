@@ -103,7 +103,7 @@ def plot(las_file, well_data):
                     
         with st.expander('Plot curves'):
             select_curves_ = st.radio('Select if you want to plot all curves or personalized curves', ('All','Select Curves'))
-            multi_curve = st.multiselect('Select a Curve', columns)
+            multi_curve_ = st.multiselect('Select a Curve', columns)
             
             if select_curves_ == 'All':
                 df_numerico = well_data.select_dtypes(include=['number'])
@@ -162,61 +162,65 @@ def plot(las_file, well_data):
                 st.plotychar(fig)
                     
             elif select_curves_ == 'Select Curves':
-                df_numerico = well_data.select_dtypes(include=['number'])
-                num_cols = len(well_data[select_curves_])
-
-                # Calcula el rango intercuartílico (IQR) para cada columna
-                Q1 = df_numerico.quantile(0.25)
-                Q3 = df_numerico.quantile(0.75)
-                IQR = Q3 - Q1
-
-                # Define el límite para identificar outliers para cada columna
-                limite_inferior = Q1 - 1.5 * IQR
-                limite_superior = Q3 + 1.5 * IQR
-
-                # Encuentra las columnas que tienen outliers
-                cols_con_outliers = []
+                if len(multi_curve_) <= 1:
+                    st.warning('Please select at least 2 curves.')
+                else:
                 
-                for col in well_data[select_curves_]:
-                    outliers = df_numerico[col][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
-                    if not outliers.empty:
-                        cols_con_outliers.append(col)
+                    df_numerico = well_data.select_dtypes(include=['number'])
+                    num_cols = len(well_data[multi_curve_])
 
-                # Crea el trace para las curvas con outliers
-                fig = go.Figure()
-                # Verificar si 'DEPTH' o 'DEPT' está en el DataFrame
-                depth_column = 'DEPTH' if 'DEPTH' in df_numerico.columns else 'DEPT' if 'DEPT' in df_numerico.columns else None
+                    # Calcula el rango intercuartílico (IQR) para cada columna
+                    Q1 = df_numerico.quantile(0.25)
+                    Q3 = df_numerico.quantile(0.75)
+                    IQR = Q3 - Q1
 
-                if depth_column is None:
-                    raise ValueError("Neither 'DEPTH' nor 'DEPT' column found in the DataFrame.")
+                    # Define el límite para identificar outliers para cada columna
+                    limite_inferior = Q1 - 1.5 * IQR
+                    limite_superior = Q3 + 1.5 * IQR
 
-                # Itera sobre las columnas con outliers y agrega la línea de la curva
-                for col in cols_con_outliers:
-                    # Agrega la curva al gráfico, utilizando DEPTH como eje y y la columna actual como eje x
-                    fig.add_trace(go.Scatter(x=df_numerico[col], y=df_numerico[depth_column], mode='lines', name=col))
+                    # Encuentra las columnas que tienen outliers
+                    cols_con_outliers = []
 
-                    # Identifica los outliers y los agrega al trace
-                    outliers = df_numerico[col][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
-                    # Ajusta las coordenadas y de los outliers para que coincidan con la columna DEPTH
-                    outliers_depth = df_numerico[depth_column][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
-                    fig.add_trace(go.Scatter(x=outliers, y=outliers_depth, mode='markers', name=f'{col} - Outliers', 
-                                            marker=dict(color='red', size=8), 
-                                            hovertemplate='Valor: %{x:.2f}<extra></extra>'))
+                    for col in well_data[multi_curve_]:
+                        outliers = df_numerico[col][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
+                        if not outliers.empty:
+                            cols_con_outliers.append(col)
 
-                # Configuraciones del diseño del gráfico
-                fig.update_layout(title='Curvas con Outliers Marcados',
-                                xaxis_title='Valor',
-                                yaxis_title='DEPTH',
-                                yaxis=dict(autorange="reversed"),
-                                showlegend=True,
-                                hovermode='closest',
-                                template='plotly_white',
-                                width=600,  # Ancho de la figura
-                                height=900) # Alto de la figura
+                    # Crea el trace para las curvas con outliers
+                    fig = go.Figure()
+                    # Verificar si 'DEPTH' o 'DEPT' está en el DataFrame
+                    depth_column = 'DEPTH' if 'DEPTH' in df_numerico.columns else 'DEPT' if 'DEPT' in df_numerico.columns else None
 
-                # Muestra el gráfico interactivo
-                st.ploty_chart(fig)
-                
+                    if depth_column is None:
+                        raise ValueError("Neither 'DEPTH' nor 'DEPT' column found in the DataFrame.")
+
+                    # Itera sobre las columnas con outliers y agrega la línea de la curva
+                    for col in cols_con_outliers:
+                        # Agrega la curva al gráfico, utilizando DEPTH como eje y y la columna actual como eje x
+                        fig.add_trace(go.Scatter(x=df_numerico[col], y=df_numerico[depth_column], mode='lines', name=col))
+
+                        # Identifica los outliers y los agrega al trace
+                        outliers = df_numerico[col][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
+                        # Ajusta las coordenadas y de los outliers para que coincidan con la columna DEPTH
+                        outliers_depth = df_numerico[depth_column][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
+                        fig.add_trace(go.Scatter(x=outliers, y=outliers_depth, mode='markers', name=f'{col} - Outliers', 
+                                                marker=dict(color='red', size=8), 
+                                                hovertemplate='Valor: %{x:.2f}<extra></extra>'))
+
+                    # Configuraciones del diseño del gráfico
+                    fig.update_layout(title='Curvas con Outliers Marcados',
+                                    xaxis_title='Valor',
+                                    yaxis_title='DEPTH',
+                                    yaxis=dict(autorange="reversed"),
+                                    showlegend=True,
+                                    hovermode='closest',
+                                    template='plotly_white',
+                                    width=600,  # Ancho de la figura
+                                    height=900) # Alto de la figura
+
+                    # Muestra el gráfico interactivo
+                    st.ploty_chart(fig)
+
 
 
 
