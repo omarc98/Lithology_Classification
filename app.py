@@ -46,7 +46,7 @@ def home():
     <div style="text-align: center;">
         <h1 style="color: #4CAF50;">Lithology Classification App</h1>
         <h2>Welcome to the Lithology Classification</h2>
-        <h4>Created by Omar Cruz and Luis Cosquillo</h4>
+        <h4 style="text-align: justify;">Created by Omar Cruz and Luis Cosquillo</h4>
         <p style="font-size: 18px; line-height: 1.6;">
             Lithology classification is an app that applies machine learning models and neural networks
             to reduce interpretation time, providing a prognosis of formations in the field.
@@ -63,7 +63,6 @@ def home():
         </ul>
     </div>
     """, unsafe_allow_html=True)
-    
 #Sidebar Navigation
 st.sidebar.title('Navigation')
 options = st.sidebar.radio('Select a page:', 
