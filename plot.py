@@ -163,7 +163,7 @@ def plot(las_file, well_data):
                     
             elif select_curves_ == 'Select Curves':
                 df_numerico = well_data.select_dtypes(include=['number'])
-                num_cols = len(well_data[select_curves])
+                num_cols = len(well_data[select_curves_])
 
                 # Calcula el rango intercuartílico (IQR) para cada columna
                 Q1 = df_numerico.quantile(0.25)
@@ -177,7 +177,7 @@ def plot(las_file, well_data):
                 # Encuentra las columnas que tienen outliers
                 cols_con_outliers = []
                 
-                for col in well_data[select_curves]:
+                for col in well_data[select_curves_]:
                     outliers = df_numerico[col][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
                     if not outliers.empty:
                         cols_con_outliers.append(col)
