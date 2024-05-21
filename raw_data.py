@@ -110,7 +110,7 @@ def raw_data(las_file, well_data):
 
         # Display columns with high missingness
         if columns_with_nulls:
-            st.subheader(f'Columns with data missing in more than 10% of rows:')
+            st.warning(f'Columns with data missing in more than 10% of rows:')
             st.write(', '.join(columns_with_nulls))
             st.info("Suggestion: Please review the curve information to apply a filling method ")
         else:
