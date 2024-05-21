@@ -11,14 +11,22 @@ def raw_data(las_file, well_data):
     import pandas as pd
     import matplotlib.pyplot as plt
     
-    """Displays LAS file data information and missingness matrix in Streamlit."""
+    """"""
 
     st.title('LAS File Data Info')
 
     if not las_file:
         st.warning('No file has been uploaded')
         return  # Exit the function if no file is uploaded
-
+    #LAS Header
+    well_data_header = {
+    "Description": [item.descr.capitalize() for item in las_file.well],
+    "Mnemonic": [item.mnemonic for item in las_file.well],
+    "Value": [item.value for item in las_file.well]}
+    df_well = pd.DataFrame(well_data_header)
+    st.subheader('**Well Header Information**')
+    st.dataframe(df_well)
+    
     # Curve Information
     st.subheader('**Curve Information**')
     curves_data = {
