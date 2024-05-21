@@ -279,10 +279,9 @@ def process(las_file, well_data):
                     st.write("Predictions:")
                     st.dataframe(y_pred)
                     curves = ['GR','NPHI','RHOB','RD']
-                    well_name = 'Pozo con ML'
                     facies_colors = ['#00008B', '#2CA25F', 'gold']
                     imputed_data['Facies_id']=y_pred
-                    facies_plot.facies_plot(imputed_data,curves,well_name,facies_colors)
+                    facies_plot.facies_plot(imputed_data,curves,facies_colors)
                     
             else:
                 st.write("Please select exactly 5 curves to predict with Machine Learning.")
@@ -301,8 +300,7 @@ def process(las_file, well_data):
                     st.write("Predictions:")
                     st.dataframe(y_pred)
                     curves = ['GR','NPHI','RHOB','RD']
-                    well_name = 'Pozo con redes neuronales'
                     facies_colors = ['#00008B', '#2CA25F', 'gold']
                     imputed_data['Facies_id']=y_pred
-                    facies_plot.facies_plot(imputed_data,curves,well_name,facies_colors)
+                    facies_plot.facies_plot(imputed_data,curves,facies_colors)
 

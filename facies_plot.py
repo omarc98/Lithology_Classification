@@ -1,9 +1,10 @@
-def facies_plot(dataframe, curves, well_name,scale_color):
+def facies_plot(dataframe, curves, scale_color):
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     import pandas as pd
     import numpy as np
     import streamlit as st
+    import lasio
 
     # Definir los colores por defecto para las curvas
 
@@ -31,7 +32,7 @@ def facies_plot(dataframe, curves, well_name,scale_color):
             )), row=1, col=len(curves) + 1)
     
     # Configuramos el diseño de la figura
-    fig.update_layout(height=1000, width=1000, title_text="Well: " + well_name, yaxis=dict(title="Depth (ft)", autorange='reversed'))
+    fig.update_layout(height=1000, width=1000, title_text="Well: " + las_file.well['WELL'].value, yaxis=dict(title="Depth (ft)", autorange='reversed'))
 
     fig.update_xaxes( tickangle = 90)
     # Ocultar las etiquetas del eje x en el subplot del heatmap
@@ -41,8 +42,6 @@ def facies_plot(dataframe, curves, well_name,scale_color):
     for annotation in fig['layout']['annotations']:
         #annotation['font'] = dict(color='black')  # Cambiar color a negro
         annotation['y'] += 0.01
-
-
    
     # Mostramos la figura interactiva
     st.plotly_chart(fig,use_container_width=True)
