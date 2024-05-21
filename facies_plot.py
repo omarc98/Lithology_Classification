@@ -27,7 +27,7 @@ def facies_plot(dataframe, curves, well_name,scale_color):
     fig.add_trace(go.Heatmap(y=dataframe['DEPTH'], z=cluster, showscale=True,colorscale=[[0,'#00008B'],[0.33,'#00008B'], [0.33,'#2CA25F'],[0.66,'#2CA25F'], [0.66,'gold'],[1,'gold']], name='Facies_id',colorbar=dict(title='Litología',
                 tickvals=[0,1,2],
                 ticktext=['0: Caliza', '1: Lutita', '2: Arenisca'],
-                x=1.2                                                                                      
+                x=1.2                                                                       
             )), row=1, col=len(curves) + 1)
     
     # Configuramos el diseño de la figura

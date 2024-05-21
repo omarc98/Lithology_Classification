@@ -163,7 +163,8 @@ def plot(las_file, well_data):
                                     hovermode='closest',
                                     template='plotly_white',
                                     width=600,  # Ancho de la figura
-                                    height=900) # Alto de la figura
+                                    height=900, # Alto de la figura
+                                    legend=dict(x=1.05,y=1))
 
                     # Muestra el gráfico interactivo
                     st.plotly_chart(fig)
