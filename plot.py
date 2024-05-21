@@ -215,7 +215,7 @@ def plot(las_file, well_data):
                                 height=900) # Alto de la figura
 
                 # Muestra el gráfico interactivo
-                st.plotychar(fig)
+                st.ploty_chart(fig)
                 
 
 
