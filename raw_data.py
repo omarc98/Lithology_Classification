@@ -76,7 +76,7 @@ def raw_data(las_file, well_data):
             fig.update_xaxes(range=[0, 1], visible=False)
             curve_index+=1
 
-        fig.update_layout(height=1000, showlegend=False, yaxis={'title':'DEPT','autorange':'reversed'})
+        fig.update_layout(height=500, showlegend=False, yaxis={'title':'DEPT','autorange':'reversed'})
         # rotate all the subtitles of 90 degrees
         for annotation in fig['layout']['annotations']: 
                 annotation['textangle']=-90
