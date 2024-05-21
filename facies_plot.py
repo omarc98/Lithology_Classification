@@ -10,10 +10,16 @@ def facies_plot(dataframe, curves, scale_color,las_file):
 
     fig = make_subplots(rows=1, cols=len(curves) + 1, subplot_titles=curves + ['Litologia'], shared_yaxes=True)
     color = ['#000000','#0000FF','#FF0000','#008000','#FF00FF','gold','#00008B']
+    
+     # Verificar si 'DEPTH' o 'DEPT' está en el DataFrame
+    depth_column = 'DEPTH' if 'DEPTH' in dataframe.columns else 'DEPT' if 'DEPT' in dataframe.columns else None
 
+    if depth_column is None:
+        raise ValueError("Neither 'DEPTH' nor 'DEPT' column found in the DataFrame.")
+        
     for i, curve in enumerate(curves, start=1):
         # Seleccionar el color de la curva
-        fig.add_trace(go.Scatter(y=dataframe['DEPTH'], x=dataframe[curve], mode='lines', name=curve, line=dict(color=color[i])), row=1, col=i)
+        fig.add_trace(go.Scatter(y=dataframe[depth_column], x=dataframe[curve], mode='lines', name=curve, line=dict(color=color[i])), row=1, col=i)
         
         fig.update_xaxes(showgrid=True,gridcolor='LightGray',showline=True,mirror=True)
         fig.update_yaxes(showgrid=True,gridcolor='LightGray',showline=True,mirror=True)
@@ -25,7 +31,7 @@ def facies_plot(dataframe, curves, scale_color,las_file):
     heatmap_colors = scale_color
 
     # Creamos el Heatmap
-    fig.add_trace(go.Heatmap(y=dataframe['DEPTH'], z=cluster, showscale=True,colorscale=[[0,'#00008B'],[0.33,'#00008B'], [0.33,'#2CA25F'],[0.66,'#2CA25F'], [0.66,'gold'],[1,'gold']], name='Facies_id',colorbar=dict(title='Litología',
+    fig.add_trace(go.Heatmap(y=dataframe[depth_column], z=cluster, showscale=True,colorscale=[[0,'#00008B'],[0.33,'#00008B'], [0.33,'#2CA25F'],[0.66,'#2CA25F'], [0.66,'gold'],[1,'gold']], name='Facies_id',colorbar=dict(title='Litología',
                 tickvals=[0,1,2],
                 ticktext=['0: Caliza', '1: Lutita', '2: Arenisca'],
                 x=1.2                                                                       
