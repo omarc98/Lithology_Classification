@@ -1,7 +1,16 @@
 def raw_data(las_file, well_data):
     import streamlit as st
+    
+    from plotly.subplots import make_subplots
+    import plotly.graph_objects as go
+    import plotly.figure_factory as ff
+    import plotly.express as px
+    
     import missingno as msno
-    import matplotlib.pyplot as plt 
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    
     """Displays LAS file data information and missingness matrix in Streamlit."""
 
     st.title('LAS File Data Info')
