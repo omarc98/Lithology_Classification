@@ -65,20 +65,7 @@ def process(las_file, well_data):
         fig, ax = plt.subplots(figsize=(12,10))  # Create a figure and axes
         msno.matrix(imputed_data,ax=ax)
         st.pyplot(fig)
-
- 
-    #Normalize resistivity curves
-    #st.title("Normalization Resistivity Curves")
-    #curves_res = st.select('Select the curve/s to normalize', columns)
-
-    #if len(curves_res) < 1:
-    #        st.warning('Please select at least 1 curve.')
-    #else:
-    #    for cur in curves:
-    #        imputed_data[cur] = np.log(imputed_data[cur])
-    #    st.success("Normalization succesfuly")
-    #    st.dataframe(imputed_data[curves_res])
-    imputed_data['RLA5'] = np.log(imputed_data['RLA5'])
+    
     #Rename the columns
     dicNamesCurves = {
     "Depth": {
@@ -166,7 +153,27 @@ def process(las_file, well_data):
 
         return df
     
-    
+    def log_rd(df, dicNamesCurves):
+        # Buscar la columna correspondiente a la resistividad profunda en el diccionario
+        resistividad_deep_col = None
+        for key, value in dicNamesCurves.items():
+            if key == "Resistivity Deep":
+                for nombre_col in value['nombre']:
+                    if nombre_col in df.columns:
+                        resistividad_deep_col = nombre_col
+                        break
+                break
+
+        # Si se encontró la columna de resistividad profunda
+        if resistividad_deep_col is not None:
+            # Aplicar logaritmo a la columna correspondiente
+            df[resistividad_deep_col] = np.log(df[resistividad_deep_col])
+        else:
+            print("No Deep Resistivity was found in the DataFrame.")
+
+        return df
+        
+    imputed_data = log_rd(imputed_data,dicNamesCurves)
     imputed_data = rename_columns(imputed_data,dicNamesCurves)
 
 
@@ -192,9 +199,6 @@ def process(las_file, well_data):
     bottom_container = st.container()
 
     curves_res = required_columns  # Esto es solo un marcador de posición
-    
-    # Cargar los modelos
-
     
     # Añadir botón de predicción basado en la selección
     with bottom_container:
