@@ -11,7 +11,6 @@ def raw_data(las_file, well_data):
     import pandas as pd
     import matplotlib.pyplot as plt
     
-    """"""
 
     st.title('LAS File Data Info')
 
