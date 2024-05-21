@@ -18,8 +18,6 @@ def process(las_file, well_data):
     if not las_file:
         st.warning('No file has been uploaded')  
     else:
-        
-        
         st.subheader(f'Treatment data')
         # User selection for imputation method
         selected_method = st.selectbox("Select method to process the data:", options=["None", "Basic dropna", "Simple Imputer (mean)", "KNN Imputer"])
@@ -34,6 +32,8 @@ def process(las_file, well_data):
             imputed_data = imputed_data.dropna()
             imputed_data.reset_index(drop=True,inplace=True)
             rows_after = len(imputed_data)
+            st.write("Stadistics before treatment data")
+            st.dataframe(well_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write("Basic dropna")
             st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\n\n Rows after: {rows_after}')
@@ -43,6 +43,10 @@ def process(las_file, well_data):
             imputed_data = well_data.copy()
             imputed_data = pd.DataFrame(imputer1.fit_transform(limpupted_data), columns=imputed_data.columns)
             rows_after = len(imputed_data)
+            st.write("Stadistics before treatment data")
+            st.dataframe(well_data.describe().loc[["mean", "std"]], use_container_width=True)
+            st.write("Simple Imputer (mean)")
+            st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\n\nRows after: {rows_after}')
 
         else:
@@ -50,6 +54,10 @@ def process(las_file, well_data):
             imputer2 = KNNImputer(n_neighbors=5)
             imputed_data = pd.DataFrame(imputer2.fit_transform(imputed_data), columns=imputed_data.columns)
             rows_after = len(imputed_data)
+            st.write("Stadistics before treatment data")
+            st.dataframe(well_data.describe().loc[["mean", "std"]], use_container_width=True)
+            st.write("KNN Imputer")
+            st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\nRows after: {rows_after}\n')
 
 
