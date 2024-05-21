@@ -1,4 +1,4 @@
-def facies_plot(dataframe, curves, scale_color):
+def facies_plot(dataframe, curves, scale_color,las_file):
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     import pandas as pd
