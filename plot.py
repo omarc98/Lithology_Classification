@@ -121,7 +121,7 @@ def plot(las_file, well_data):
                 # Encuentra las columnas que tienen outliers
                 cols_con_outliers = []
                 
-                for col in well_data.curves:
+                for col in well_data.columns:
                     outliers = df_numerico[col][(df_numerico[col] < limite_inferior[col]) | (df_numerico[col] > limite_superior[col])]
                     if not outliers.empty:
                         cols_con_outliers.append(col)
