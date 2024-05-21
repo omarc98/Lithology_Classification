@@ -42,17 +42,27 @@ if las_file:
     st.sidebar.markdown(f'<b>Well Name: </b>: {las_file.well.WELL.value}',unsafe_allow_html=True)
     
 def home():
-    st.title('Lithology Classification App')
-    st.write('## Welcome to the Lithology Classification')
-    st.write('#### Created by Omar Cruz and Luis Cosquillo')
-    st.write('''Lithology classification is an app that applies machine learning models       and neural networks to reduce interpretation time, providing a prognosis of formations     in the field.''')
-    st.write('To begin using the app, load your LAS file using the file upload option on       the sidebar. Once you have done this, you can navigate to the relevant tools using the     Navigation menu.')
-    st.write('\n')
-    st.write('## Sections')
-    st.write('**Header Info:** Information from the LAS file header.')
-    st.write('**Data Information:** Information about the curves contained within the LAS       file, including names, statisics and raw data values.')
-    st.write('**Data Visualisation:** Visualisation tools to view las file data on a log       plot, crossplot and histogram.')
-    st.write('**Data Processing and ML:** Process the data to eliminate null values or possible anomalous data before predicting using machine learning or neural networks.')
+    st.markdown("""
+    <div style="text-align: center;">
+        <h1 style="color: #4CAF50;">Lithology Classification App</h1>
+        <h2>Welcome to the Lithology Classification</h2>
+        <h4>Created by Omar Cruz and Luis Cosquillo</h4>
+        <p style="font-size: 18px; line-height: 1.6;">
+            Lithology classification is an app that applies machine learning models and neural networks
+            to reduce interpretation time, providing a prognosis of formations in the field.
+        </p>
+        <p style="font-size: 18px; line-height: 1.6;">
+            To begin using the app, load your LAS file using the file upload option on the sidebar. 
+            Once you have done this, you can navigate to the relevant tools using the Navigation menu.
+        </p>
+        <h2>Sections</h2>
+        <ul style="font-size: 18px; line-height: 1.6; text-align: left;">
+            <li><strong>Data Information:</strong> Information about the curves contained within the LAS file, including names, statistics, and raw data values.</li>
+            <li><strong>Data Visualisation:</strong> Visualisation tools to view LAS file data on a log plot, crossplot, and histogram.</li>
+            <li><strong>Data Processing and ML:</strong> Process the data to eliminate null values or possible anomalous data before predicting using machine learning or neural networks.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
     
 #Sidebar Navigation
 st.sidebar.title('Navigation')
