@@ -59,7 +59,7 @@ def process(las_file, well_data):
             st.write("KNN Imputer")
             st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\nRows after: {rows_after}\n')
-
+        st.success("Method applied successfuly")
 
         st.subheader(f"{selected_method} missingness matrix:")
         fig, ax = plt.subplots(figsize=(12,10))  # Create a figure and axes
