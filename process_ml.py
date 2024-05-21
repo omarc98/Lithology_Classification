@@ -183,10 +183,11 @@ def process(las_file, well_data):
     # Descripción de la aplicación
     st.write("""The following models are used to predict lithology from specific curves of
     LAS file. These are Gamma Ray (GR), Resistivity Deep (RD), Photoelectrical Factor (PEF), 
-    Neutron Porosity (NPHI) and Density (RHOB). Please select these specific curves to predict.""")
+    Neutron Porosity (NPHI) and Density (RHOB). """)
 
     # Selección del modelo de clasificación
     selection = st.radio('Select the classification model', ('Machine Learning', 'Neuronal Network'))
+    st.warning("Please make sure that the LAS file contains the input curves.")
 
     # Verificar que las columnas necesarias están en los datos imputados
     required_columns = ['GR', 'RD', 'PEF', 'NPHI', 'RHOB']
