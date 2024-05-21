@@ -102,10 +102,10 @@ def plot(las_file, well_data):
                     st.pyplot(fig)
                     
         with st.expander('Plot curves'):
-            select_curves = st.radio('Select if you want to plot all curves or personalized curves', ('All','Select Curves'))
+            select_curves_ = st.radio('Select if you want to plot all curves or personalized curves', ('All','Select Curves'))
             multi_curve = st.multiselect('Select a Curve', columns)
             
-            if select_curves == 'All':
+            if select_curves_ == 'All':
                 df_numerico = well_data.select_dtypes(include=['number'])
                 num_cols = len(well_data.columns)
 
@@ -161,7 +161,7 @@ def plot(las_file, well_data):
                 # Muestra el gráfico interactivo
                 st.plotychar(fig)
                     
-            elif select_curves == 'Select Curves':
+            elif select_curves_ == 'Select Curves':
                 df_numerico = well_data.select_dtypes(include=['number'])
                 num_cols = len(well_data[select_curves])
 
