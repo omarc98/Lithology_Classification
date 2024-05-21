@@ -1,7 +1,6 @@
 import streamlit as st
 from io import StringIO
 
-import header
 import raw_data
 import plot
 import process_ml
@@ -58,12 +57,10 @@ def home():
 #Sidebar Navigation
 st.sidebar.title('Navigation')
 options = st.sidebar.radio('Select a page:', 
-    ['Home', 'Header Information', 'Data Information', 'Data Visualisation', 'Data Processing and ML'])
+    ['Home', 'Data Information', 'Data Visualisation', 'Data Processing and ML'])
 
 if options == 'Home':
     home()
-elif options == 'Header Information':
-    header.header(las_file)
 elif options == 'Data Information':
     raw_data.raw_data(las_file, well_data)
 elif options == 'Data Visualisation':
