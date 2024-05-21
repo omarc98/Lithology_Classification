@@ -36,7 +36,7 @@ def raw_data(las_file, well_data):
     rows = well_data.shape[0]
     cols = len(well_data.columns)
 
-    st.write("The LAS file has ",cols,"columns and ",rows,"rows")
+    st.write("The LAS file has ",cols,"log curves and ",rows,"data points")
 
         
     data_nan = well_data.notnull().astype('int')
@@ -76,7 +76,7 @@ def raw_data(las_file, well_data):
         st.plotly_chart(fig, use_container_width=True)
 
     # Curve Statistics
-    st.write('<b>Curve Statistics</b>', unsafe_allow_html=True)
+    st.subheader('Curve Statistics')
     st.write(well_data.describe())
     
     # Missingness Summary
@@ -97,7 +97,7 @@ def raw_data(las_file, well_data):
 
     if not percent_nan.empty:
         # Display percentage of missing values
-        st.write('**Percentage of null data in each column:**')
+        st.subheader('**Percentage of null data in each column:**')
         st.write(missing_df)
 
         # Display columns with high missingness
