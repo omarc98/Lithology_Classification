@@ -39,7 +39,7 @@ las_file, well_data = load_data(uploadedfile)
 
 if las_file:
     st.sidebar.success('File Uploaded Successfully')
-    st.sidebar.write(f'<b>Well Name: </b>: {las_file.well.WELL.value}',unsafe_allow_html=True)
+    st.sidebar.markdown(f'<b>Well Name: </b>: {las_file.well.WELL.value}',unsafe_allow_html=True)
     
 def home():
     st.title('Lithology Classification App')
@@ -67,10 +67,7 @@ elif options == 'Data Visualisation':
     plot.plot(las_file, well_data)
 elif options == 'Data Processing and ML':
     process_ml.process(las_file,well_data)
-
-    
-# Mensaje de error si no se ha subido un archivo LAS
-if options != 'Home' and not las_file:
+else:
     st.sidebar.error('Please upload a LAS file to proceed.')
 
 

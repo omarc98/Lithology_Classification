@@ -1,5 +1,4 @@
 def process(las_file, well_data):
-    # Plotly imports
     import streamlit as st
     
     from plotly.subplots import make_subplots
