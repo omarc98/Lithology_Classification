@@ -102,7 +102,7 @@ def plot(las_file, well_data):
                     st.pyplot(fig)
                     
         with st.expander('Plot curves'):
-            select_curves_ = st.radio('Select if you want to plot all curves or personalized curves', ('All','Select Curves'))
+            select_curves_ = st.radio('Select the option you prefer to plot the curves', ('All','Select Curves'))
             multi_curve_ = st.multiselect('Select a Curve', columns)
             
             if select_curves_ == 'All':
