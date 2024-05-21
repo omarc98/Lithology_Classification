@@ -32,7 +32,7 @@ def raw_data(las_file, well_data):
 
         
     #LAS Information
-    st.subheader('LAS Information')
+    st.subheader('LAS Data Visualization')
     rows = well_data.shape[0]
     cols = len(well_data.columns)
 
@@ -104,6 +104,7 @@ def raw_data(las_file, well_data):
         if columns_with_nulls:
             st.subheader(f'Columns with data missing in more than 10% of rows:')
             st.write(', '.join(columns_with_nulls))
+            st.info("Suggestion: Please review the curve information to apply a filling method ")
         else:
             st.write('No columns have more than 10% missing data.')
     else:
