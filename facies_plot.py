@@ -34,11 +34,11 @@ def facies_plot(dataframe, curves, scale_color,las_file):
     fig.add_trace(go.Heatmap(y=dataframe[depth_column], z=cluster, showscale=True,colorscale=[[0,'#00008B'],[0.33,'#00008B'], [0.33,'#2CA25F'],[0.66,'#2CA25F'], [0.66,'gold'],[1,'gold']], name='Facies_id',colorbar=dict(title='Litología',
                 tickvals=[0,1,2],
                 ticktext=['0: Caliza', '1: Lutita', '2: Arenisca'],
-                x=1.2                                                                       
+                x=1.35                                                                       
             )), row=1, col=len(curves) + 1)
     
     # Configuramos el diseño de la figura
-    fig.update_layout(height=1000, width=1000, title_text="Well: " + las_file.well['WELL'].value, yaxis=dict(title="Depth (ft)", autorange='reversed'))
+    fig.update_layout(height=1000, width=1000, title_text="Well: " + las_file.well['WELL'].value, yaxis=dict(title="Depth (ft)", autorange='reversed'),legend=dict(xanchor='right',x=1.25))
 
     fig.update_xaxes( tickangle = 90)
     # Ocultar las etiquetas del eje x en el subplot del heatmap

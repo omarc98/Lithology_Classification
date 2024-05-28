@@ -25,7 +25,8 @@ def process(las_file, well_data):
         # Display descriptive statistics for the selected method
         if selected_method == "None":
             st.write("No changes were made to the dataframe.")
-            imputed_data = well_data     
+            imputed_data = well_data 
+            st.success("Any method applied")
 
         elif selected_method == "Basic dropna":
             imputed_data = well_data.copy()
@@ -37,6 +38,7 @@ def process(las_file, well_data):
             st.write("Basic dropna")
             st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\n\n Rows after: {rows_after}')
+            st.success("Method applied successfuly")
 
         elif selected_method == "Simple Imputer (mean)":
             imputer1 = SimpleImputer(strategy='mean')
@@ -48,6 +50,7 @@ def process(las_file, well_data):
             st.write("Simple Imputer (mean)")
             st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\n\nRows after: {rows_after}')
+            st.success("Method applied successfuly")
 
         else:
             imputed_data = well_data.copy()
@@ -59,7 +62,7 @@ def process(las_file, well_data):
             st.write("KNN Imputer")
             st.dataframe(imputed_data.describe().loc[["mean", "std"]], use_container_width=True)
             st.write(f'Rows before: {rows_before}\nRows after: {rows_after}\n')
-        st.success("Method applied successfuly")
+            st.success("Method applied successfuly")
 
         st.subheader(f"{selected_method} missingness matrix:")
         fig, ax = plt.subplots(figsize=(12,10))  # Create a figure and axes
@@ -115,7 +118,7 @@ def process(las_file, well_data):
         "default" : "RM"
     },
     "Resistivity Deep": {
-        "nombre" : ["R85O","ILD","RILD","DLL","LLD","RLLD","RLA5","DEEP"],
+        "nombre" : ["R85O","ILD","RILD","DLL","LLD","RLLD","RLA5","DEEP","AT90"],
         "default" : "RD"
     },
     "Sonic": {
@@ -174,8 +177,9 @@ def process(las_file, well_data):
         return df
         
     imputed_data = log_rd(imputed_data,dicNamesCurves)
-    imputed_data = rename_columns(imputed_data,dicNamesCurves)
-
+    
+    #imputed_data = rename_columns(imputed_data,dicNamesCurves)
+    data = imputed_data.copy() 
 
     # Título de la aplicación
     st.title('LAS File Selection Model and Prediction')
@@ -184,57 +188,85 @@ def process(las_file, well_data):
     st.write("""The following models are used to predict lithology from specific curves of
     LAS file. These are Gamma Ray (GR), Resistivity Deep (RD), Photoelectrical Factor (PEF), 
     Neutron Porosity (NPHI) and Density (RHOB). """)
+    
+    
 
     # Selección del modelo de clasificación
     selection = st.radio('Select the classification model', ('Machine Learning', 'Neuronal Network'))
     st.warning("Please make sure that the LAS file contains the input curves.")
-
+    
+    columnas = well_data.columns
+    gamma_ray = st.selectbox("Select Gamma Ray: ",columnas)
+    
+    res_deep = st.selectbox("Select Deep Resistivity: ",columnas[1:])
+    
+    pef = st.selectbox("Select Photoelectric Factor: ",columnas[2:])
+    
+    neutron = st.selectbox("Select Neutron: ",columnas[3:])
+    
+    density = st.selectbox("Select Density: ",columnas[4:])
+    
+    if gamma_ray and res_deep and pef and neutron and density:
+        new_column_names = {
+            gamma_ray: 'GR',
+            res_deep: 'RD',
+            pef: 'PEF',
+            neutron: 'NPHI',
+            density: 'RHOB'
+        }
+        data = data.rename(columns= new_column_names)
     # Verificar que las columnas necesarias están en los datos imputados
     required_columns = ['GR', 'RD', 'PEF', 'NPHI', 'RHOB']
-    if all(col in imputed_data.columns for col in required_columns):
-        X = imputed_data[required_columns]
-    else:
-        X = pd.DataFrame(columns=required_columns)  
-
+    
+    X = data[required_columns]  
+    
     # Contenedor inferior para el botón de predicción
     bottom_container = st.container()
-
-    curves_res = required_columns  # Esto es solo un marcador de posición
     
     # Añadir botón de predicción basado en la selección
     with bottom_container:
         if selection == 'Machine Learning':
-            if len(curves_res) == 5:  # Permitir predicción solo con exactamente 5 curvas
-                button = st.button("Predict with Machine Learning")
-                if button:
-                    from joblib import load
-                    loaded_ml = load('classification_model.joblib')
-                    y_pred = loaded_ml.predict(X)
-                    st.write("Predictions:")
-                    st.dataframe(y_pred)
-                    curves = ['GR','NPHI','RHOB','RD']
-                    facies_colors = ['#00008B', '#2CA25F', 'gold']
-                    imputed_data['Facies_id']=y_pred
-                    facies_plot.facies_plot(imputed_data,curves,facies_colors,las_file)
-                    
-            else:
-                st.write("Please select exactly 5 curves to predict with Machine Learning.")
+            button = st.button("Classify with Machine Learning")
+            if button:
+                from joblib import load
+                loaded_ml = load('classification_model.joblib')
+                y_pred = loaded_ml.predict(X)
+                st.subheader("Results:")
+                facies_colors = ['#00008B', '#2CA25F', 'gold']
+                imputed_data['Facies_id']=y_pred
+                curves = [gamma_ray,res_deep,pef,neutron,density]
+                facies_plot.facies_plot(imputed_data,curves,facies_colors,las_file)  
+                st.write("Output dataframe with lithology")
+                mapa_categorias = {
+                0: 'Caliza',
+                1: 'Lutita',
+                2: 'Arenisca'
+                }
+                imputed_data['Lithology'] = imputed_data['Facies_id'].map(mapa_categorias)
+                st.dataframe(imputed_data)
+           
         elif selection == "Neuronal Network":
-            if len(curves_res) == 5:  # Permitir predicción solo con exactamente 5 curvas           
-                button = st.button("Predict with Neuronal Network")
-                if button:
-                    from joblib import load
-                    from sklearn.preprocessing import StandardScaler
-                    scaler= StandardScaler()
-                    #loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
-                    loaded_rnn = load('neuronal_network_model.joblib')    
-                    X = scaler.fit_transform(X)
-                    y_pred = loaded_rnn.predict(X)
-                    y_pred = np.argmax(y_pred, axis=1)
-                    st.write("Predictions:")
-                    st.dataframe(y_pred)
-                    curves = ['GR','NPHI','RHOB','RD']
-                    facies_colors = ['#00008B', '#2CA25F', 'gold']
-                    imputed_data['Facies_id']=y_pred
-                    facies_plot.facies_plot(imputed_data,curves,facies_colors,las_file)
+            button = st.button("Classify with Neuronal Network")
+            if button:
+                from joblib import load
+                from sklearn.preprocessing import StandardScaler
+                scaler= StandardScaler()
+                #loaded_rnn = tf.keras.models.load_model('neuronal_network_model.h5')
+                loaded_rnn = load('neuronal_network_model.joblib')    
+                X = scaler.fit_transform(X)
+                y_pred = loaded_rnn.predict(X)
+                y_pred = np.argmax(y_pred, axis=1)
+                st.subheader("Results:")
+                facies_colors = ['#00008B', '#2CA25F', 'gold']
+                imputed_data['Facies_id']=y_pred
+                curves = [gamma_ray,res_deep,pef,neutron,density]
+                facies_plot.facies_plot(imputed_data,curves,facies_colors,las_file)
+                st.write("Output dataframe with lithology")
+                mapa_categorias = {
+                0: 'Caliza',
+                1: 'Lutita',
+                2: 'Arenisca'
+                }
+                imputed_data['Lithology'] = imputed_data['Facies_id'].map(mapa_categorias)
+                st.dataframe(imputed_data)
 
